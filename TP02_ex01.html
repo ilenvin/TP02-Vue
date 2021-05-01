@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TP02 ex1</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <style>
+       div#app {
+            border: 1px solid black;
+            width: 500px;
+            padding: 20px;
+            }
+        div#box {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <box></box>
+    </div>
+    <script>
+        const button_click = {
+            data() {
+                return {
+                    text: "I'm some random text"
+                }
+            },
+            methods: {
+                popText: function() {
+                    this.$emit('textIsPoped', this.text)
+                }
+            },
+            template: `
+                <button v-on:click="popText()">
+                    Click Me
+                </button>
+            `
+        }
+        const box = {
+            data() {
+                return {
+                    text: "Click button to load text"
+                }
+            }, 
+            methods: {
+                popText(text) {
+                        this.text = text;
+                    }
+            },
+            components: {
+                'button-click': button_click
+            },
+            template:`
+                <div id='box'>
+                    <div>{{text}}</div>
+                        <button-click v-on:textIsPoped="popText($event)"></button-click>
+                </div>
+            `
+        }
+        const app = Vue.createApp({
+            components: {
+                'box': box,
+                'button-click': button_click
+            }
+        })
+        app.mount('#app')
+    </script>
+</body>
+</html>
